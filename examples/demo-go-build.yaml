@@ -1,0 +1,14 @@
+apiVersion: v1
+name: demo-go-build
+description: 示例：拉取 Go 示例仓库并编译
+git:
+  url: https://github.com/golang/example.git
+  branch: master
+workdir: .
+env:
+  CGO_ENABLED: "0"
+stages:
+  - name: build
+    commands:
+      - go version
+      - go build ./...

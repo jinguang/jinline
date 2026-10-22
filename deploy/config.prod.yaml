@@ -1,0 +1,30 @@
+# jinline 生产环境配置（AlmaLinux 9.5）
+# 安装路径：/opt/jinline
+# 修改后需 systemctl restart jinline 生效
+server:
+  addr: ":8080"
+  # 前端静态目录，相对于 systemd 的 WorkingDirectory（/opt/jinline）
+  static_dir: "./web"
+
+mysql:
+  # 请修改为实际的数据库账号与密码
+  dsn: "jinline:CHANGE_ME_DB_PASSWORD@tcp(127.0.0.1:3306)/jinline?charset=utf8mb4&parseTime=True&loc=Local"
+
+redis:
+  addr: "127.0.0.1:6379"
+  # 请修改为实际的 Redis 密码；未设置密码时留空
+  password: "CHANGE_ME_REDIS_PASSWORD"
+  db: 0
+  queue_key: "jinline:queue:build"
+
+workspace:
+  # 代码检出、构建与日志目录（由 systemd 的 ReadWritePaths 放行）
+  root: "/var/lib/jinline/workspace"
+  pipelines_dir: "/var/lib/jinline/pipelines"
+  logs_dir: "/var/lib/jinline/logs"
+  # 运行成功后清理工作目录（失败时保留，便于排查）
+  cleanup_on_success: true
+
+worker:
+  # 并发构建任务数，按 CPU / 内存调整
+  concurrency: 2

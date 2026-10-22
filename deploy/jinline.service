@@ -1,0 +1,29 @@
+[Unit]
+Description=jinline CI/CD pipeline service
+Documentation=file:///opt/jinline/docs/deploy-almalinux-9.5.md
+After=network-online.target mysqld.service redis.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=jinline
+Group=jinline
+WorkingDirectory=/opt/jinline
+Environment=HOME=/var/lib/jinline
+ExecStart=/opt/jinline/jinline -c /opt/jinline/configs/config.yaml
+Restart=on-failure
+RestartSec=5s
+LimitNOFILE=65536
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/jinline
+
+# 流水线需要构建容器镜像时：
+#   1) 安装 Docker 并将用户加入 docker 组：usermod -aG docker jinline
+#   2) systemctl restart jinline
+# 注意：docker 组权限等价于 root，请自行评估安全边界。
+
+[Install]
+WantedBy=multi-user.target

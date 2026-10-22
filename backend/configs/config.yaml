@@ -1,0 +1,30 @@
+# jinline 服务端配置
+server:
+  addr: ":8080"
+  # 前端构建产物目录，存在时由后端直接托管（SPA）
+  static_dir: "../frontend/dist"
+
+mysql:
+  # 流水线运行状态存储
+  dsn: "root:123456@tcp(127.0.0.1:3306)/jinline?charset=utf8mb4&parseTime=True&loc=Local"
+
+redis:
+  # 构建任务消息队列
+  addr: "127.0.0.1:6379"
+  password: ""
+  db: 0
+  queue_key: "jinline:queue:build"
+
+workspace:
+  # 代码检出与构建目录
+  root: "./data/workspace"
+  # 流水线 YAML 配置目录
+  pipelines_dir: "./data/pipelines"
+  # 运行日志目录（按 run id 存放）
+  logs_dir: "./data/logs"
+  # 运行成功后是否清理工作目录（失败时保留便于排查）
+  cleanup_on_success: true
+
+worker:
+  # 并发执行的构建任务数
+  concurrency: 2

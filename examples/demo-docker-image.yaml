@@ -1,0 +1,17 @@
+apiVersion: v1
+name: demo-docker-image
+description: 示例：拉取代码并构建容器镜像（需要执行器节点安装 Docker）
+git:
+  url: https://github.com/gin-gonic/gin.git
+  branch: master
+workdir: .
+stages:
+  - name: test
+    commands:
+      - go version
+      - go test ./... -count=1
+  - name: image
+    image: jinline/demo-gin:latest
+    dockerfile: Dockerfile
+    context: .
+    push: false
